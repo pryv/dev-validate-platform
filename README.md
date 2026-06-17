@@ -54,4 +54,4 @@ against a deployed platform as part of release validation. This repo depends on
 
 ## License
 
-BSD-3-Clause.
+[BSD-3-Clause](https://github.com/pryv/dev-validate-platform/blob/main/LICENSE)
