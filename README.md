@@ -46,6 +46,17 @@ receiver (e.g. [backloop.dev](https://backloop.dev)) and pass
 Exit code is `0` when all checks pass, non-zero otherwise — suitable for CI /
 post-deploy gating.
 
+### Run against a local open-pryv.io checkout
+
+To validate a **feature branch before it is deployed**, `scripts/run-local.js`
+boots a throwaway single-instance from a local checkout (pinned to the same
+isolated PostgreSQL / rqlite / InfluxDB ports its `config/test-config.yml` uses —
+those DBs must be running), registers a user, runs the suite, and tears down:
+
+```bash
+node scripts/run-local.js --open-pryv /path/to/open-pryv.io
+```
+
 ### lib-js client suite
 
 The canonical client-library validation (the `pryv` lib-js test suite) is run
