@@ -1,0 +1,15 @@
+{
+  "name": "dev-validate-platform",
+  "version": "0.1.0",
+  "description": "Live-platform validation toolkit for Pryv.io: runs the lib-js client suite and a webhook scoped-notification validation harness against a freshly deployed platform.",
+  "license": "BSD-3-Clause",
+  "bin": {
+    "validate-webhooks": "bin/validate-webhooks.js"
+  },
+  "scripts": {
+    "validate-webhooks": "node bin/validate-webhooks.js"
+  },
+  "dependencies": {
+    "pryv": "^3.4.1"
+  }
+}
