@@ -10,8 +10,17 @@
  *   node bin/validate-webhooks.js \
  *     --service https://reg.pryv.me/service/info \
  *     --username alice --password ****** \
- *     [--receiver-host 127.0.0.1] [--receiver-port 7654] \
- *     [--receiver-public-url https://host.example.com:7654]
+ *     [--receiver-bind 0.0.0.0] [--receiver-port 7654] \
+ *     [--receiver-host 127.0.0.1] [--receiver-public-url https://host.example.com:7654]
+ *
+ * Receiver flags:
+ *   --receiver-bind        address the local HTTP receiver listens on (default 0.0.0.0)
+ *   --receiver-port        port the receiver listens on (default 7654)
+ *   --receiver-host        host used to build the callback URL when no
+ *                          --receiver-public-url is given (default 127.0.0.1)
+ *   --receiver-public-url  full callback base URL advertised to the platform;
+ *                          overrides --receiver-host. MUST be reachable from the
+ *                          platform's servers (they POST the webhook to it).
  *
  * Alternatively, skip the login and pass a personal apiEndpoint with an embedded
  * token (useful when the platform's trusted-app login check rejects a bare
@@ -25,7 +34,7 @@
  * platform POSTs the webhook to it) — a public host/port, not a local-only name.
  *
  * Config may also come from env: SERVICE_INFO_URL, API_ENDPOINT, USERNAME,
- * PASSWORD, RECEIVER_HOST, RECEIVER_PORT, RECEIVER_PUBLIC_URL.
+ * PASSWORD, RECEIVER_BIND, RECEIVER_HOST, RECEIVER_PORT, RECEIVER_PUBLIC_URL.
  */
 
 const { validateWebhooks } = require('../src/validateWebhooks');
@@ -42,6 +51,7 @@ async function main () {
     username: arg('username', process.env.USERNAME),
     password: arg('password', process.env.PASSWORD),
     receiverHost: arg('receiver-host', process.env.RECEIVER_HOST || '127.0.0.1'),
+    receiverBind: arg('receiver-bind', process.env.RECEIVER_BIND),
     receiverPort: parseInt(arg('receiver-port', process.env.RECEIVER_PORT || '7654'), 10),
     receiverPublicUrl: arg('receiver-public-url', process.env.RECEIVER_PUBLIC_URL)
   };
