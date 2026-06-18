@@ -26,9 +26,20 @@ async function validateWebhooks (config, log = () => {}) {
   const streamA = 'dvp-a-' + ts;
   const streamB = 'dvp-b-' + ts;
 
-  const service = new pryv.Service(config.serviceInfoUrl);
-  const connection = await service.login(config.username, config.password, 'dev-validate-platform');
-  log('logged in to ' + maskToken(connection.apiEndpoint));
+  // Two ways to obtain the personal connection:
+  //  - apiEndpoint (with embedded token): use it directly, no login. Avoids the
+  //    trusted-app login check some platforms enforce (a bare password login can
+  //    be rejected unless an Origin header is sent, which is awkward from Node).
+  //  - username/password: classic personal login via the service info.
+  let connection;
+  if (config.apiEndpoint) {
+    connection = new pryv.Connection(config.apiEndpoint);
+    log('using provided apiEndpoint ' + maskToken(config.apiEndpoint));
+  } else {
+    const service = new pryv.Service(config.serviceInfoUrl);
+    connection = await service.login(config.username, config.password, 'dev-validate-platform');
+    log('logged in to ' + maskToken(connection.apiEndpoint));
+  }
 
   // in-scope + out-of-scope streams
   await connection.api([
